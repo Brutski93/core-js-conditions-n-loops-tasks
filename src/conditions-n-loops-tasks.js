@@ -495,8 +495,8 @@ function shuffleChar(str1, iterations) {
  * @param {number} number The source number
  * @returns {number} The nearest larger number, or original number if none exists.
  */
-function getNearestBigger(number) {
-  return number;
+function getNearestBigger(/* number */) {
+  throw new Error('Not implemented');
 }
 
 module.exports = {
