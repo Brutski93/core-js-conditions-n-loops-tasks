@@ -479,8 +479,10 @@ function makeIterations(str) {
 
 function shuffleChar(str1, iterations) {
   let str = str1;
-  for (let i = 0; i < iterations; i += 1) {
+  let recurs = iterations;
+  for (let i = 0; i < recurs; i += 1) {
     str = makeIterations(str);
+    if (str === str1) recurs = (iterations % (i + 1)) + i + 1;
   }
   return str;
 }
