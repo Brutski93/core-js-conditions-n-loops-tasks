@@ -467,15 +467,22 @@ function sortByAsc(arr1) {
  *  '012345', 3 => '024135' => '043215' => '031425'
  *  'qwerty', 3 => 'qetwry' => 'qtrewy' => 'qrwtey'
  */
-function shuffleChar(str1, iterations) {
-  let str = '';
+function makeIterations(str) {
+  let str1 = '';
+  let str2 = '';
   for (let i = 0; i < str.length; i += 2) {
-    str += str1[i];
+    str1 += str[i];
+    if (str[i + 1]) str2 += str[i + 1];
   }
-  for (let i = 1; i < str.length; i += 2) {
-    str += str1[i];
+  return str1 + str2;
+}
+
+function shuffleChar(str1, iterations) {
+  let str = str1;
+  for (let i = 0; i < iterations; i += 1) {
+    str = makeIterations(str);
   }
-  return iterations === 1 ? str : shuffleChar(str, iterations - 1);
+  return str;
 }
 
 /** 15
@@ -495,8 +502,60 @@ function shuffleChar(str1, iterations) {
  * @param {number} number The source number
  * @returns {number} The nearest larger number, or original number if none exists.
  */
-function getNearestBigger(/* number */) {
-  throw new Error('Not implemented');
+function sortNumber(input) {
+  const str = input;
+  let index = 0;
+  let tempindex = str.length - 1;
+  while (tempindex > 0) {
+    if (+str[tempindex] > +str[0]) {
+      index = tempindex;
+      break;
+    }
+    tempindex -= 1;
+  }
+  let sortedStr = str[index];
+  let done = true;
+  for (let i = str.length - 1; i > 0; i -= 1) {
+    if (i !== index) {
+      if (+str[0] < +str[i] && done) {
+        sortedStr += str[0];
+        done = false;
+      }
+      sortedStr += str[i];
+    }
+  }
+  if (done) sortedStr += str[0];
+  return sortedStr;
+}
+
+function getLastNumbers(number, length) {
+  let newNumber = '';
+  const str = `${number}`;
+  for (let i = 1; i <= length; i += 1) {
+    newNumber = `${str[str.length - i]}${newNumber}`;
+  }
+  return newNumber;
+}
+
+function getNumber(number, partOfNumber) {
+  const input = `${number}`;
+  const str = `${partOfNumber}`;
+  const tempNumber = sortNumber(str);
+  let finalNumber = '';
+  for (let i = 0; i < input.length - tempNumber.length; i += 1) {
+    finalNumber += input[i];
+  }
+  finalNumber += tempNumber;
+  return +finalNumber;
+}
+
+function getNearestBigger(number) {
+  let s = 0;
+  for (let i = 2; i <= `${number}`.length; i += 1) {
+    s = getLastNumbers(number, i);
+    if (+s[0] < +s[1]) return getNumber(number, s);
+  }
+  return number;
 }
 
 module.exports = {
